@@ -34,6 +34,7 @@ import RichText from '../../rich-text';
 import InspectorControls from '../../inspector-controls';
 import ColorPalette from '../../color-palette';
 import ContrastChecker from '../../contrast-checker';
+import EditorColors from '../../editor-colors';
 
 const { getComputedStyle } = window;
 
@@ -198,18 +199,26 @@ class ParagraphBlock extends Component {
 							onChange={ this.toggleDropCap }
 						/>
 					</PanelBody>
-					<PanelColor title={ __( 'Background Color' ) } colorValue={ backgroundColor } initialOpen={ false }>
-						<ColorPalette
-							value={ backgroundColor }
-							onChange={ ( colorValue ) => setAttributes( { backgroundColor: colorValue } ) }
-						/>
-					</PanelColor>
-					<PanelColor title={ __( 'Text Color' ) } colorValue={ textColor } initialOpen={ false }>
-						<ColorPalette
-							value={ textColor }
-							onChange={ ( colorValue ) => setAttributes( { textColor: colorValue } ) }
-						/>
-					</PanelColor>
+					<EditorColors>
+						{ ( { colors, disableCustomColors } ) => ( [
+							<PanelColor title={ __( 'Background Color' ) } colorValue={ backgroundColor } initialOpen={ false } key="background-color">
+								<ColorPalette
+									colors={ colors }
+									disableCustomColors={ disableCustomColors }
+									onChange={ ( colorValue ) => setAttributes( { backgroundColor: colorValue } ) }
+									value={ backgroundColor }
+								/>
+							</PanelColor>,
+							<PanelColor title={ __( 'Text Color' ) } colorValue={ textColor } initialOpen={ false } key="text-color">
+								<ColorPalette
+									colors={ colors }
+									disableCustomColors={ disableCustomColors }
+									onChange={ ( colorValue ) => setAttributes( { textColor: colorValue } ) }
+									value={ textColor }
+								/>
+							</PanelColor>,
+						] ) }
+					</EditorColors>
 					{ this.nodeRef && <ContrastCheckerWithFallbackStyles
 						node={ this.nodeRef }
 						textColor={ textColor }

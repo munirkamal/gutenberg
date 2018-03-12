@@ -16,6 +16,7 @@ import BlockControls from '../../block-controls';
 import BlockAlignmentToolbar from '../../block-alignment-toolbar';
 import ColorPalette from '../../color-palette';
 import ContrastChecker from '../../contrast-checker';
+import EditorColors from '../../editor-colors';
 import InspectorControls from '../../inspector-controls';
 
 const { getComputedStyle } = window;
@@ -101,18 +102,27 @@ class ButtonBlock extends Component {
 							checked={ !! clear }
 							onChange={ this.toggleClear }
 						/>
-						<PanelColor title={ __( 'Background Color' ) } colorValue={ color } >
-							<ColorPalette
-								value={ color }
-								onChange={ ( colorValue ) => setAttributes( { color: colorValue } ) }
-							/>
-						</PanelColor>
-						<PanelColor title={ __( 'Text Color' ) } colorValue={ textColor } >
-							<ColorPalette
-								value={ textColor }
-								onChange={ ( colorValue ) => setAttributes( { textColor: colorValue } ) }
-							/>
-						</PanelColor>
+						<EditorColors>
+							{ ( { colors, disableCustomColors } ) => ( [
+								<PanelColor title={ __( 'Background Color' ) } colorValue={ color } key="background-color">
+									<ColorPalette
+										colors={ colors }
+										disableCustomColors={ disableCustomColors }
+										onChange={ ( colorValue ) => setAttributes( { color: colorValue } ) }
+										value={ color }
+									/>
+								</PanelColor>,
+								<PanelColor title={ __( 'Text Color' ) } colorValue={ textColor } key="text-color" >
+									<ColorPalette
+										colors={ colors }
+										disableCustomColors={ disableCustomColors }
+										onChange={ ( colorValue ) => setAttributes( { textColor: colorValue } ) }
+										value={ textColor }
+									/>
+								</PanelColor>,
+							]
+							) }
+						</EditorColors>
 						{ this.nodeRef && <ContrastCheckerWithFallbackStyles
 							node={ this.nodeRef }
 							textColor={ textColor }
